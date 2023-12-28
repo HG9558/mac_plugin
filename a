@@ -1,81 +1,35 @@
-const fs = require('fs');
-const chalk = require('chalk');
+const data: { [key: string]: any } = [];
+      ^^^^
 
-module.exports = {
-    input: [
-        'app/**/*.{js,jsx}',
-        // Use ! to filter out files or directories
-        '!app/**/*.spec.{js,jsx}',
-        '!app/i18n/**',
-        '!**/node_modules/**',
-    ],
-    output: './',
-    options: {
-        debug: true,
-        func: {
-            list: ['i18next.t', 'i18n.t'],
-            extensions: ['.js', '.jsx']
-        },
-        trans: {
-            component: 'Trans',
-            i18nKey: 'i18nKey',
-            defaultsKey: 'defaults',
-            extensions: ['.js', '.jsx'],
-            fallbackKey: function(ns, value) {
-                return value;
-            },
+SyntaxError: Missing initializer in const declaration
+    at internalCompileFunction (node:internal/vm:73:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1274:20)
+    at Module._compile (node:internal/modules/cjs/loader:1320:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1414:10)
+    at Module.load (node:internal/modules/cjs/loader:1197:32)
+    at Module._load (node:internal/modules/cjs/loader:1013:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+    at node:internal/main/run_main_module:28:49
 
-            // https://react.i18next.com/latest/trans-component#usage-with-simple-html-elements-like-less-than-br-greater-than-and-others-v10.4.0
-            supportBasicHtmlNodes: true, // Enables keeping the name of simple nodes (e.g. <br/>) in translations instead of indexed keys.
-            keepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p'], // Which nodes are allowed to be kept in translations during defaultValue generation of <Trans>.
+// 自动获取同目录下的json文件夹下的json文件
+const fileList = autoLoadFile(path.join(__dirname, "./json"), true, [".json"]);
 
-            // https://github.com/acornjs/acorn/tree/master/acorn#interface
-            acorn: {
-                ecmaVersion: 2020,
-                sourceType: 'module', // defaults to 'module'
-            }
-        },
-        lngs: ['en','de'],
-        ns: [
-            'locale',
-            'resource'
-        ],
-        defaultLng: 'en',
-        defaultNs: 'resource',
-        defaultValue: '__STRING_NOT_TRANSLATED__',
-        resource: {
-            loadPath: 'i18n/{{lng}}/{{ns}}.json',
-            savePath: 'i18n/{{lng}}/{{ns}}.json',
-            jsonIndent: 2,
-            lineEnding: '\n'
-        },
-        nsSeparator: false, // namespace separator
-        keySeparator: false, // key separator
-        interpolation: {
-            prefix: '{{',
-            suffix: '}}'
-        },
-        metadata: {},
-        allowDynamicKeys: false,
-    },
-    transform: function customTransform(file, enc, done) {
-        "use strict";
-        const parser = this.parser;
-        const content = fs.readFileSync(file.path, enc);
-        let count = 0;
-
-        parser.parseFuncFromString(content, { list: ['i18next._', 'i18next.__'] }, (key, options) => {
-            parser.set(key, Object.assign({}, options, {
-                nsSeparator: false,
-                keySeparator: false
-            }));
-            ++count;
-        });
-
-        if (count > 0) {
-            console.log(`i18next-scanner: count=${chalk.cyan(count)}, file=${chalk.yellow(JSON.stringify(file.relative))}`);
+const data: { [key: string]: any } = [];
+fileList.forEach((_, i) => {
+  for (const [key, val] of Object.entries(_.data)) {
+    if (i === 0) {
+      // 首次遍历新建对应键名
+      data.push({ 键名: key, [_.name]: val });
+    } else {
+      // 非首次遍历匹配对应键名新增数据
+      data.forEach((e) => {
+        if (e["键名"] === key) {
+          e[_.name] = val;
         }
-
-        done();
+      });
     }
-};
+  }
+});
+
+
+运行报错
