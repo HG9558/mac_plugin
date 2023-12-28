@@ -1,11 +1,1 @@
-failed to load config from /Users/z9ty-armour/Documents/code/kmgames-back-stage/vite.config.ts
-error when starting dev server:
-TypeError: (0 , import_theme.default) is not a function
-    at getPluginsList (/Users/z9ty-armour/Documents/code/kmgames-back-stage/vite.config.ts:522:30)
-    at vite_config_default (/Users/z9ty-armour/Documents/code/kmgames-back-stage/vite.config.ts:633:14)
-    at loadConfigFromFile (file:///Users/z9ty-armour/Documents/code/kmgames-back-stage/node_modules/.pnpm/vite@4.5.1_@types+node@20.10.5_sass@1.69.5_terser@5.26.0/node_modules/vite/dist/node/chunks/dep-68d1a114.js:66181:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async resolveConfig (file:///Users/z9ty-armour/Documents/code/kmgames-back-stage/node_modules/.pnpm/vite@4.5.1_@types+node@20.10.5_sass@1.69.5_terser@5.26.0/node_modules/vite/dist/node/chunks/dep-68d1a114.js:65774:28)
-    at async _createServer (file:///Users/z9ty-armour/Documents/code/kmgames-back-stage/node_modules/.pnpm/vite@4.5.1_@types+node@20.10.5_sass@1.69.5_terser@5.26.0/node_modules/vite/dist/node/chunks/dep-68d1a114.js:65051:20)
-    at async CAC.<anonymous> (file:///Users/z9ty-armour/Documents/code/kmgames-back-stage/node_modules/.pnpm/vite@4.5.1_@types+node@20.10.5_sass@1.69.5_terser@5.26.0/node_modules/vite/dist/node/cli.js:763:24)
- ELIFECYCLE  Command failed with exit code 1.
+ 类型 "typeof import("/Users/z9ty-armour/Documents/code/kmgames-back-stage/node_modules/.pnpm/@pureadmin+theme@3.2.0/node_modules/@pureadmin/theme/dist/index")" 没有调用签名。
