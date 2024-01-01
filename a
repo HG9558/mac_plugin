@@ -1,1 +1,4 @@
 pnpm install --legacy-peer-deps
+
+Unknown option: 'legacy-peer-deps'
+Did you mean 'strict-peer-dependencies'? Use "--config.unknown=value" to force an unknown option.
