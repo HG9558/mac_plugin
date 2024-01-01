@@ -1,3 +1,1 @@
-> copy .\assets\git-hooks\pre-commit .\.git\hooks\pre-commit
-
-sh: copy: command not found
+pnpm install --legacy-peer-deps
