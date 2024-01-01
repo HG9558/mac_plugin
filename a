@@ -1,6 +1,13 @@
-"k4cc29cf7": "清空缓存并返回登录页",
-  "k-7534e285": "赛事分类",
-  "k4d8f8cb4": "事件发生时间",
-  "k-7bf99eeb": "足球进球",
-  "k5f7a0c6c": "红牌/黄牌",
-  "k37c6cc40": "角球"
+ <el-button
+                link
+                type="primary"
+                :icon="useRenderIcon(icon_money)"
+                :disabled="
+                  !!parentRow.halfSettlementStatus ||
+                  !parentRow.childrenData.length
+                "
+                @click="settlementFunction(parentRow.matchId, 'half')"
+                :loading="balanceLoading['half']"
+              >
+                {{ t("上半场结算") }}
+              </el-button>
