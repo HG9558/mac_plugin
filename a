@@ -1,13 +1,14 @@
- <el-button
-                link
-                type="primary"
-                :icon="useRenderIcon(icon_money)"
-                :disabled="
-                  !!parentRow.halfSettlementStatus ||
-                  !parentRow.childrenData.length
-                "
-                @click="settlementFunction(parentRow.matchId, 'half')"
-                :loading="balanceLoading['half']"
-              >
-                {{ t("上半场结算") }}
-              </el-button>
+<template>
+  <el-button
+    :icon="icon"
+    :type="type"
+    :link="link"
+    :disabled="disabled"
+    :loading="loading"
+    :circle="circle"
+    @click="btnClick"
+  >
+    <slot />
+    {{ btnText }}
+  </el-button>
+</template>
