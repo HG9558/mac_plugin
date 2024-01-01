@@ -1,1 +1,759 @@
-val.replace(/[^\d.]/g, "").replace(/^0+|0+$/g, "");
+<template>
+  <div class="main">
+    <SearchForm
+      :form="form"
+      @resetForm="resetForm"
+      :loading="loading"
+      @onSearch="onSearch"
+    />
+
+    <div class="flex mt-4">
+      <el-button
+        v-for="item in SPORT_ID_MAP"
+        :key="item.value"
+        :type="item.value === currentSportId ? 'success' : ''"
+        @click="onSearch('reload', item.value)"
+        >{{ item.label }}</el-button
+      >
+    </div>
+
+    <PureTableBar
+      :title="t('结算管理')"
+      :columns="columns"
+      @refresh="onSearch('reload')"
+    >
+      <template v-slot="{ size, dynamicColumns }">
+        <pure-table
+          align-whole="center"
+          showOverflowTooltip
+          :loading="loading"
+          :size="size"
+          row-key="matchId"
+          adaptive
+          :data="dataList"
+          :columns="dynamicColumns"
+          :pagination="pagination"
+          :paginationSmall="size === 'small' ? true : false"
+          :expand-row-keys="[]"
+          :header-cell-style="{
+            background: 'var(--el-fill-color-light)',
+            color: 'var(--el-text-color-primary)'
+          }"
+          @expand-change="expandChange"
+          @selection-change="handleSelectionChange"
+          @page-size-change="handleTableWidthChange"
+          @page-current-change="handleCurrentChange"
+        >
+          <template #sn="{ index: parIndex }">{{ parIndex + 1 }}</template>
+          <template
+            #expand="{
+              row: parentRow,
+              index: parIndex
+            }: {
+              row: SaleDataAPI.PreSaleList,
+              index: number
+            }"
+          >
+            <div class="flex mb-2">
+              <el-button
+                link
+                type="primary"
+                :icon="useRenderIcon(icon_money)"
+                :disabled="
+                  !!parentRow.halfSettlementStatus ||
+                  !parentRow.childrenData.length
+                "
+                @click="settlementFunction(parentRow.matchId, 'half')"
+                :loading="balanceLoading['half']"
+              >
+                {{ t("上半场结算") }}
+              </el-button>
+              <el-button
+                link
+                type="danger"
+                :disabled="
+                  !!parentRow.fullSettlementStatus ||
+                  !parentRow.childrenData.length
+                "
+                :loading="balanceLoading['all']"
+                :icon="useRenderIcon(icon_money)"
+                @click="settlementFunction(parentRow.matchId, 'all')"
+              >
+                {{ t("全场结算") }}
+              </el-button>
+              <span class="mr-4 ml-4">{{ t("注") }}:</span>
+              <span class="mr-4">A: {{ t("编辑") }}</span>
+              <span class="mr-4">B: {{ t("确认修改") }}</span>
+              <span class="mr-4">C: {{ t("确认新增") }}</span>
+            </div>
+            <div class="m-4">
+              <div v-for="item in parentRow.childrenData" :key="item.type">
+                <div class="mt-3 mb-1 font-bold">{{ item.value }}</div>
+                <pure-table
+                  row-key="id"
+                  :data="item.tableList"
+                  :loading="childloading"
+                  :columns="childColumns"
+                  size="small"
+                  table-layout="auto"
+                  border
+                  :header-cell-style="{
+                    background: 'var(--el-fill-color-light)',
+                    color: 'var(--el-text-color-primary)',
+                    textAlign: 'center'
+                  }"
+                  :cell-style="{ textAlign: 'center' }"
+                >
+                  <template #eventCode="{ row }">
+                    <span>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
+                  </template>
+
+                  <template #eventTime="{ row, index: childIndex }">
+                    <el-date-picker
+                      v-model="row.eventTime"
+                      type="datetime"
+                      :placeholder="t('请选择时间')"
+                      :disabled="!row.isEdit"
+                      value-format="x"
+                      @change="changeEventTime(row, childIndex, item.tableList)"
+                      format="YYYY-MM-DD HH:mm:ss"
+                    />
+                  </template>
+                  <template #matchPeriodId="{ row }">
+                    <el-select
+                      :disabled="!row.isEdit"
+                      v-model="row.matchPeriodId"
+                      :placeholder="t('请选择')"
+                    >
+                      <el-option :label="t('上半场')" :value="31" />
+                      <el-option :label="t('下半场')" :value="100" />
+                    </el-select>
+                  </template>
+
+                  <template #homeAway="{ row, index: childIndex }">
+                    <div>
+                      <el-select
+                        :disabled="!row.isEdit"
+                        v-model="row.homeAway"
+                        :placeholder="t('请选择')"
+                        @change="
+                          teamChangeEvent(row, childIndex, item.tableList)
+                        "
+                      >
+                        <el-option :label="t('主队')" value="home" />
+                        <el-option :label="t('客队')" value="away" />
+                      </el-select>
+                    </div>
+                  </template>
+
+                  <template #player1Name="{ row }">
+                    <el-input
+                      v-model="row.player1Name"
+                      :disabled="!row.isEdit"
+                      maxLength="20"
+                    />
+                  </template>
+
+                  <template
+                    #canceled="{
+                      row,
+                      index: childIndex
+                    }: {
+                      row: SattleDataAPI.MatchEventsList,
+                      index: number
+                    }"
+                  >
+                    <el-switch
+                      v-if="
+                        row.isBackEndReturnData &&
+                        childIndex === parentRow.childrenData.length - 1
+                      "
+                      v-model="row.canceled"
+                      inline-prompt
+                      :disabled="!row.isEdit"
+                      class="pure-datatheme"
+                    />
+                    <span v-else>-</span>
+                  </template>
+
+                  <template
+                    #operation="{
+                      row,
+                      index: childIndex
+                    }: {
+                      row: SattleDataAPI.MatchEventsList,
+                      index: number
+                    }"
+                  >
+                    <div class="flex items-center justify-center">
+                      <el-button
+                        circle
+                        type="primary"
+                        @click="editChild(row)"
+                        v-if="item.tableList.length - 1 === childIndex"
+                      >
+                        <div class="w-[14px] h-[14px] align-middle">A</div>
+                      </el-button>
+                      <el-button
+                        circle
+                        v-if="
+                          row.isBackEndReturnData &&
+                          parentRow.childrenData.length - 1 === childIndex
+                        "
+                        type="primary"
+                        @click="
+                          handleChildrenData(row, parIndex, 'edit', parentRow)
+                        "
+                      >
+                        <div class="w-[14px] h-[14px] align-middle">B</div>
+                      </el-button>
+                      <el-button
+                        v-else-if="!row.isBackEndReturnData"
+                        circle
+                        type="primary"
+                        @click="
+                          handleChildrenData(row, parIndex, 'add', parentRow)
+                        "
+                      >
+                        <div class="w-[14px] h-[14px] align-middle">C</div>
+                      </el-button>
+                    </div>
+                  </template>
+                </pure-table>
+                <div class="mt-2 cursor-pointer">
+                  <IconifyIconOffline
+                    width="25px"
+                    :icon="icon_circle_fill"
+                    @click="addChildRow(item.tableList, item.type)"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #operation="">
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :fit="false"
+              size="small"
+              :icon="useRenderIcon(icon_money)"
+            >
+              {{ t("编辑") }}
+            </el-button>
+          </template>
+        </pure-table>
+      </template>
+    </PureTableBar>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { PureTableBar } from "@/components/RePureTableBar";
+import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import icon_money from "@iconify-icons/ri/money-cny-box-fill";
+import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
+import { useSettle } from "./utils/hook";
+import SearchForm from "./component/SearchForm.vue";
+import { t } from "@/plugins/i18n";
+import { message } from "@/utils/message";
+import { MATCH_EVENT_CODE } from "@/utils/maps/sports_map";
+import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+defineOptions({ name: "settle_admin" });
+
+const changeEventTime = (
+  row: SattleDataAPI.MatchEventsList,
+  childIndex: number,
+  childrenData: SattleDataAPI.MatchEventsList[]
+) => {
+  if (childIndex === 0) return;
+  if (row.eventTime <= childrenData[childIndex - 1].eventTime) {
+    message("时间不能小于前一个事件发生时间", { type: "error" });
+    row.eventTime = "";
+  }
+};
+
+const teamChangeEvent = (
+  row: SattleDataAPI.MatchEventsList,
+  childIndex: number,
+  childrenData: SattleDataAPI.MatchEventsList[]
+) => {
+  if (childIndex === 0) {
+    if (row.homeAway === "home") {
+      row.t1 = 1;
+      row.t2 = 0;
+    } else {
+      row.t1 = 0;
+      row.t2 = 1;
+    }
+  } else {
+    if (row.homeAway === "home") {
+      row.t1 = +childrenData[childIndex - 1].t1 + 1;
+      row.t2 = childrenData[childIndex - 1].t2;
+    } else {
+      row.t2 = +childrenData[childIndex - 1].t2 + 1;
+      row.t1 = childrenData[childIndex - 1].t1;
+    }
+  }
+};
+
+const {
+  loading,
+  childloading,
+  columns,
+  dataList,
+  pagination,
+  onSearch,
+  handleTableWidthChange,
+  handleCurrentChange,
+  handleSelectionChange,
+  childColumns,
+  expandChange,
+  addChildRow,
+  editChild,
+  form,
+  resetForm,
+  balanceLoading,
+  settlementFunction,
+  currentSportId,
+  handleChildrenData
+} = useSettle();
+
+onMounted(() => {
+  onSearch();
+});
+</script>
+
+<style scoped lang="scss">
+:deep(.el-dropdown-menu__item i) {
+  margin: 0;
+}
+.search-form {
+  :deep(.el-form-item) {
+    margin-bottom: 12px;
+  }
+}
+</style>
+
+
+// hook.tsx
+
+import { message } from "@/utils/message";
+import type { PaginationProps } from "@pureadmin/table";
+import { removeEmptyStringKeys } from "@/utils/utilFn";
+import { t } from "@/plugins/i18n";
+import { usePublicHooks } from "@/hooks";
+import dayjs from "dayjs";
+import { handleTableWidth } from "@/utils/getTableWidth";
+
+export function useSettle() {
+  const form = reactive({
+    date: '',
+    matchId: '',
+    matchType: '',
+    matchName: '',
+    settleStatus: '',
+    halfSettlementStatus: '',
+    fullSettlementStatus: '',
+    dataVendors: ''
+  });
+  const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
+  const loading = ref(true);
+  const childloading = ref(true);
+  const switchLoadMap = ref({});
+  const currentSportId = ref(1);
+
+  const balanceLoading = reactive<{ half: boolean, all: boolean }>({
+    half: false, all: false
+  });
+  const { switchStyle } = usePublicHooks();
+  const pagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 10,
+    currentPage: 1,
+  });
+
+  const columns: TableColumnList = [
+    {
+      type: "expand",
+      slot: "expand",
+      fixed: true
+    },
+    {
+      label: t('序号'),
+      fixed: true,
+      slot: "sn",
+      headerRenderer: (d) => handleTableWidth(d, t('序号'))
+    },
+    {
+      prop: "matchName",
+      label: t('赛事名称'),
+      fixed: true,
+      align: 'left',
+      headerRenderer: (d) => handleTableWidth(d, t('赛事名称'))
+    },
+    {
+      label: t("赛事ID"),
+      prop: "matchId",
+      headerRenderer: (d) => handleTableWidth(d, t('赛事ID'))
+    },
+    {
+      label: t("赛事等级"),
+      prop: "level",
+      headerRenderer: (d) => handleTableWidth(d, t('赛事等级'))
+    },
+    {
+      label: t("比赛时间"),
+      prop: "beginTimeLong",
+      minWidth: 200,
+      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
+      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'), 'auto')
+    },
+
+    {
+      label: t("主队"),
+      prop: "homeTeamNameCn",
+      minWidth: 150,
+      formatter: ({ homeTeamNameCn }) => homeTeamNameCn ?? '-',
+      headerRenderer: (d) => handleTableWidth(d, t('主队'), 'auto')
+    },
+    {
+      label: t("半场"),
+      prop: "halfTime",
+      formatter: ({ halfTime }) => halfTime ?? '-',
+      headerRenderer: (d) => handleTableWidth(d, t('半场'), 'auto')
+    },
+    {
+      label: t("全场"),
+      prop: "wholeTime",
+      formatter: ({ wholeTime }) => wholeTime ?? '-',
+      headerRenderer: (d) => handleTableWidth(d, t('全场'), 'auto')
+    },
+    {
+      label: t("客队"),
+      prop: "awayTeamNameCn",
+      minWidth: 150,
+      headerRenderer: (d) => handleTableWidth(d, t('客队'), 'auto')
+    },
+    {
+      label: t("审核员"),
+      prop: "auditor",
+      formatter: ({ auditor }) => auditor || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('审核员'))
+    },
+    {
+      label: t("操盘手"),
+      prop: "trader",
+      formatter: ({ trader }) => trader || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('操盘手'))
+    },
+    {
+      label: t("比赛状态"),
+      prop: "status",
+      formatter: ({ status }) => status ?? '-',
+      headerRenderer: (d) => handleTableWidth(d, t('比赛状态'))
+    },
+    {
+      label: t("待审核"),
+      prop: "peddingReview",
+      formatter: ({ peddingReview }) => peddingReview || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('待审核'))
+    },
+    {
+      label: t("赛事数据源"),
+      prop: "eventDataSource",
+      formatter: ({ eventDataSource }) => eventDataSource || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('赛事数据源'))
+    },
+    {
+      label: t("确认中"),
+      prop: "confirming",
+      formatter: ({ confirming }) => confirming || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('确认中'))
+    },
+    {
+      label: t("上半场结算"),
+      prop: "halfSettlementStatus",
+      formatter: ({ halfSettlementStatus }) => halfSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
+      headerRenderer: (d) => handleTableWidth(d, t('上半场结算'))
+    },
+
+    {
+      label: t("全场结算"),
+      prop: "fullSettlementStatus",
+      formatter: ({ fullSettlementStatus }) => fullSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
+      headerRenderer: (d) => handleTableWidth(d, t('全场结算'))
+    },
+    {
+      label: t("异常"),
+      prop: "abnormal",
+      formatter: ({ abnormal }) => abnormal || '-',
+      headerRenderer: (d) => handleTableWidth(d, t('异常'))
+    },
+    // {
+    //   label: t("结算状态"),
+    //   prop: "settleStatus",
+    //   formatter: ({ settleStatus }) => settleStatus || '-'
+    // },
+    /* {
+      label: t("操作"),
+      prop: "operation",
+      slot: 'operation',
+      fixed: "right",
+    }, */
+  ];
+
+  const childColumns: TableColumnList = [
+    {
+      label: t("主队事件数量"),
+      prop: 't1',
+    },
+    {
+      label: t("客队事件数量"),
+      prop: 't2',
+    },
+    {
+      label: t("事件编码"),
+      slot: 'eventCode',
+    },
+    {
+      label: t("事件发生时间"),
+      slot: 'eventTime',
+      headerRenderer: (d) => handleTableWidth(d, t('事件发生时间'))
+    },
+    /*  {
+       label: t("体育ID"),
+       slot: 'sportId',
+       width: 150
+     }, */
+    {
+      label: t("比赛阶段"),
+      slot: 'matchPeriodId',
+    },
+    {
+      label: t("主/客队"),
+      slot: 'homeAway',
+    },
+    {
+      label: t("1号球员名称"),
+      slot: 'player1Name',
+    },
+    {
+      label: t("事件是否被取消"),
+      slot: 'canceled',
+    },
+    {
+      label: t("操作"),
+      slot: "operation",
+    },
+    {
+      label: t("结算次数"),
+      formatter: ({ }) => '-',
+    },
+    /* {
+      label: t("未结算"),
+      formatter: ({ }) => '-'
+    },
+    {
+      label: t("已结算"),
+      formatter: ({ }) => '-'
+    }, */
+    {
+      label: t("数据商事件"),
+      formatter: ({ }) => '-',
+      // headerRenderer: (d) => handleTableWidth(d, t('数据商事件'))
+    }
+  ];
+
+  const handleTableWidthChange = (pageSize: number) => {
+    pagination.pageSize = pageSize;
+    onSearch();
+  }
+
+  const handleCurrentChange = (val: number) => {
+    pagination.currentPage = val;
+    onSearch()
+  }
+
+  const handleSelectionChange = (val) => {
+    console.log("handleSelectionChange", val);
+  }
+
+  const onSearch = async (type?: string, spoprtId?: number) => {
+    try {
+      if (spoprtId) currentSportId.value = spoprtId;
+      if (type === 'reload') pagination.currentPage = 1;
+      loading.value = true;
+      const data = removeEmptyStringKeys(form);
+      const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
+        ...data,
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage,
+        sportId: currentSportId.value
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: "error" });
+      dataList.length = 0;
+      dataList.push(...res.data.list);
+      dataList.forEach(_ => _.childrenData = [
+        { type: 'goal', value: '足球进球', key: 'matchScoreRecordList', tableList: [] },
+        { type: 'red_card', value: '红牌/黄牌', key: 'penaltyCardRecordList', tableList: [] },
+        { type: 'corner', value: '角球', key: 'cornerRecordList', tableList: [] },
+        // { type: 'yellow_card', value: '其他事件记录列表', key: 'allOtherList', tableList: [] },
+      ]);
+      pagination.total = res.data.total;
+      pagination.pageSize = res.data.pageSize;
+      pagination.currentPage = res.data.pageNum;
+    } catch (error) {
+      loading.value = false
+    }
+  }
+
+  const resetForm = formEl => {
+    if (!formEl) return;
+    formEl.resetFields();
+    onSearch('reload');
+  };
+
+  const addChildRow = (tableList, type) => {
+    if (tableList.length !== 0 && !tableList[tableList.length - 1].player1Name) {
+      message('请先完成上一个事件添加', { type: 'error' })
+    } else {
+      const tempList = {
+        eventTime: null,
+        homeAway: null,
+        matchPeriodId: null,
+        player1Name: null,
+        isBackEndReturnData: false,
+        t1: null,
+        t2: null,
+        eventCode: type
+      }
+      tableList.push(tempList);
+    }
+  }
+
+  const editChild = (row: SattleDataAPI.MatchEventsList,) => {
+    row.isEdit = true;
+  }
+
+  const expandChange = (row, d) => {
+    if (!d.some(item => item.matchId === row.matchId)) return;
+    getChildRenData(row);
+  }
+
+
+  const getChildRenData = async (row) => {
+    childloading.value = true;
+    const res = await API.getMatchEvents({ matchId: row.matchId })
+    childloading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' })
+    row.childrenData.forEach(item => {
+      item.tableList = res.data[item.key]
+      if (item.tableList.length) {
+        item.tableList.forEach(_ => {
+          _.isEdit = false
+          _.matchId = row.matchId;
+          _.isBackEndReturnData = true;
+          _.canceled = Boolean(_.canceled);
+        })
+      }
+    })
+  }
+
+  const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit', parentRow) => {
+    if (!row.isEdit) return;
+    const requireDdata = {
+      t1: row.t1,
+      t2: row.t2,
+      eventCode: row.eventCode,
+      eventTime: row.eventTime,
+      sportId: 1,// row.sportId,
+      matchPeriodId: row.matchPeriodId,
+      homeAway: row.homeAway,
+      player1Name: row.player1Name,
+    }
+    if (!Object.keys(requireDdata).every(key => {
+      if (key === 't1' || key === 't2') {
+        return parseInt(requireDdata[key]) >= 0
+      } else {
+        return requireDdata[key]
+      }
+    })) return message(t('请输入完整的内容'), { type: "error" })
+
+    childloading.value = true;
+    row.isEdit = true;
+
+    const params: SattleDataAPI.MatchEventParams = {
+      canceled: 0,
+      eventCode: row.eventCode,
+      eventTime: row.eventTime as Date,
+      homeAway: row.homeAway,
+      matchId: dataList[parentIndex].matchId,
+      matchPeriodId: +row.matchPeriodId,
+      player1Name: row.player1Name,
+      dataSourceCode: "SK",
+      remark: '',
+      sourceType: 1,
+      sportId: 1, // row.sportId,
+      t1: +row.t1,
+      t2: +row.t2,
+    }
+
+    let res;
+    if (type === 'add') {
+      res = await API.addMatchEvent(params)
+    } else {
+      params.id = row.id;
+      params.canceled = Number(row.canceled);
+      res = await API.updateMatchEvent(params)
+    }
+    childloading.value = false;
+    message(res.msg, { type: res.code ? 'error' : "success" });
+    if (res.code) return;
+    row.isEdit = false;
+    getChildRenData(parentRow)
+  }
+
+  // 结算
+  const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
+    try {
+      balanceLoading[type] = true;
+      let res;
+      if (type === 'half') res = await API.firstHalfSettlement({ matchId })
+      else res = await API.allSettlement({ matchId })
+      message(res.msg, { type: res.code ? 'error' : 'success' })
+      balanceLoading[type] = false;
+      onSearch();
+    } catch (error) {
+      balanceLoading[type] = false;
+    }
+  }
+
+  return {
+    form,
+    loading,
+    childloading,
+    columns,
+    dataList,
+    pagination,
+    onSearch,
+    resetForm,
+    handleTableWidthChange,
+    switchLoadMap,
+    expandChange,
+    handleCurrentChange,
+    handleSelectionChange,
+    switchStyle,
+    childColumns,
+    getChildRenData,
+    addChildRow,
+    editChild,
+    currentSportId,
+    balanceLoading,
+    settlementFunction,
+    handleChildrenData,
+  };
+}
+
+优化下上面的代码
