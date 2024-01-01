@@ -1,4 +1,16 @@
-pnpm install --legacy-peer-deps
+Z9ZR-M5693:kmgames-front-stage z9ty-armour$ yarn build
+yarn run v1.22.21
+warning package.json: No license field
+$ cd ./cli && node ./index.js
+/Users/z9ty-armour/Documents/kmgames-front-stage/cli/index.js:2
+const inquirer = require('inquirer');
+                 ^
 
-Unknown option: 'legacy-peer-deps'
-Did you mean 'strict-peer-dependencies'? Use "--config.unknown=value" to force an unknown option.
+Error [ERR_REQUIRE_ESM]: require() of ES Module /Users/z9ty-armour/Documents/kmgames-front-stage/node_modules/.pnpm/inquirer@9.2.12/node_modules/inquirer/lib/inquirer.js from /Users/z9ty-armour/Documents/kmgames-front-stage/cli/index.js not supported.
+Instead change the require of inquirer.js in /Users/z9ty-armour/Documents/kmgames-front-stage/cli/index.js to a dynamic import() which is available in all CommonJS modules.
+    at Object.<anonymous> (/Users/z9ty-armour/Documents/kmgames-front-stage/cli/index.js:2:18) {
+  code: 'ERR_REQUIRE_ESM'
+}
+
+Node.js v18.19.0
+error Command failed with exit code 1.
