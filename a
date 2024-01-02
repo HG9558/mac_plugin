@@ -1,12 +1,17 @@
 /Users/z9ty-armour/Documents/code/kmgames-front-stage/cli/index.js:2
-const inquirer = require('inquirer');
-                 ^
+import inquirer from ('inquirer');
+^^^^^^
 
-Error [ERR_REQUIRE_ESM]: require() of ES Module /Users/z9ty-armour/Documents/code/kmgames-front-stage/node_modules/.pnpm/inquirer@9.2.12/node_modules/inquirer/lib/inquirer.js from /Users/z9ty-armour/Documents/code/kmgames-front-stage/cli/index.js not supported.
-Instead change the require of inquirer.js in /Users/z9ty-armour/Documents/code/kmgames-front-stage/cli/index.js to a dynamic import() which is available in all CommonJS modules.
-    at Object.<anonymous> (/Users/z9ty-armour/Documents/code/kmgames-front-stage/cli/index.js:2:18) {
-  code: 'ERR_REQUIRE_ESM'
-}
+SyntaxError: Cannot use import statement outside a module
+    at internalCompileFunction (node:internal/vm:73:18)
+    at wrapSafe (node:internal/modules/cjs/loader:1274:20)
+    at Module._compile (node:internal/modules/cjs/loader:1320:27)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1414:10)
+    at Module.load (node:internal/modules/cjs/loader:1197:32)
+    at Module._load (node:internal/modules/cjs/loader:1013:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+    at node:internal/main/run_main_module:28:49
 
 Node.js v18.19.0
 error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
