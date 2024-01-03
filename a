@@ -1,37 +1,5 @@
-/*
- * @Author: Shawn.GE
- * @Date: 2023-12-13
- * @LastEditors: Passion.KMG
- * @LastEditTime: 2023-12-15 21:42:36
- * @FilePath: /KMG/src/views/kmg/desktop/components/Header/index.tsx
- * @Description:
- */
-
-import usePublicState from '@core/hooks/usePublicState';
-import style from './style.scss';
-import {ETHEME} from '../../configs';
-
-export default React.memo(() => {
-  const {user, base} = usePublicState();
-  console.log('index.tsx文件 16==============行打印=', base.serverTime);
-  return (
-    <header className={style.wrapper}>
-      <div className="contents">
-        <img className="logo" src={require('./i/icon-logo.png')} />
-        <div className="menus">
-          <div className="menu-item active">体育投注</div>
-          <div className="menu-item">电子竞技</div>
-          <div className="menu-item">注单历史</div>
-          <div className="menu-item">赛果</div>
-          <div className="menu-item">体育竞猜规则</div>
-        </div>
-        <div className="ad">
-          <img src={require(`./i/ad${user.theme === ETHEME.DARK ? '_dark' : ''}.png`)} />
-          <div className="date">17:55:31 GMT+8</div>
-        </div>
-      </div>
-    </header>
-  );
-});
-
-react项目，现在需要根据base.serverTime 实现一个始终，然后替换 17:55:31  假设base.serverTime返回的值是1704190193197
+ dataList.forEach(_ => _.childrenData = [
+        { type: 'goal', key: 'matchScoreRecordList', tableList: [] },
+        { type: 'yellow_red_card', key: 'penaltyCardRecordList', tableList: [] },
+        { type: 'corner', key: 'cornerRecordList', tableList: [] },
+      ]);
