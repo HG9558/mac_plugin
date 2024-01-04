@@ -1,8 +1,18 @@
-"k-2de511f1": "删除当前记录",
-  "k-5a8b9e72": "红牌",
-  "k2747d9ac": "黄牌",
-  "k-40fe3e01": "是否确认删除数据么",
-  "k-6d916cc1": "188数据源联赛ID",
-  "k329a5ff8": "联赛LOGO",
-  "k60442504": "联赛中文名",
-  "k2d4c7434": "联赛英文名"
+/** 文本复制指令（默认双击复制） */
+export const enter: Directive = {
+  mounted(el: HTMLInputElement, binding: DirectiveBinding) {
+    useEventListener(el, 'keyup', (e) => {
+      if (e.key === 'Enter') binding.value();
+    });
+  },
+};
+
+  <el-input
+          v-model="form.teamId"
+          :placeholder="t('球队ID')"
+          clearable
+          v-enter="onSearch('reload')"
+          class="!w-[200px]"
+        />
+
+修改一下这个自定义指令，现在还没有点击自己就执行了
