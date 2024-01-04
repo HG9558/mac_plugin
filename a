@@ -1,18 +1,48 @@
-/** 文本复制指令（默认双击复制） */
-export const enter: Directive = {
-  mounted(el: HTMLInputElement, binding: DirectiveBinding) {
-    useEventListener(el, 'keyup', (e) => {
-      if (e.key === 'Enter') binding.value();
-    });
-  },
-};
+一个组件中：
+{
+          matchType === EMatchTypes.EARLY && <DatePicker />
+        }
 
-  <el-input
-          v-model="form.teamId"
-          :placeholder="t('球队ID')"
-          clearable
-          v-enter="onSearch('reload')"
-          class="!w-[200px]"
-        />
+使用了DatePicker
 
-修改一下这个自定义指令，现在还没有点击自己就执行了
+如何为他传递一个参数leagueID
+
+下面是这个组件
+
+export const DatePicker = React.memo(() => {
+  const earlyGroup = useSelector((state: IStore) => state.sport.display.earlyGroup);
+  const scrollContainerRef = React.useRef(null);
+  const {switchQueryDate} = useSettings();
+  const currentDi = useSelector((state: IStore) => state.sport.userSettings.di);
+  if (!earlyGroup) {
+    return (<></>);
+  }
+  const scrollToEnd = React.useCallback(() => {
+    scrollContainerRef.current.scrollTo({left: 260, behavior: 'smooth'});
+  }, []);
+  const scrollToStart = React.useCallback(() => {
+    scrollContainerRef.current.scrollTo({left: 0, behavior: 'smooth'});
+  }, []);
+
+  const week = _.times(7).map((i) => ({name: dayjs().add(i+1, 'day').format('MM月DD日'), count: earlyGroup[i+1]}));
+  const dates = [{name: '所有日期', count: earlyGroup[0]}, ...week, {name: '其他', count: _.last(earlyGroup)}];
+
+  return (
+    <>
+      <span className={classnames(styles.arrow, 'scroll-start')} onClick={scrollToStart}>
+        <DpIcon type='arrow' />
+      </span>
+      <div className={styles.datePicker} ref={scrollContainerRef}>
+        {dates.map((item, index) => (
+          <span
+            className={classnames({active: currentDi === index}, {'unclickable': !item.count})}
+            key={item.name}
+            onClick={() =>item.count && switchQueryDate(index)}>{`${item.name}(${item.count || 0})`}</span>
+        ))}
+      </div>
+      <span className={styles.arrow} onClick={scrollToEnd}>
+        <DpIcon type='arrow' />
+      </span>
+    </>
+  );
+});
