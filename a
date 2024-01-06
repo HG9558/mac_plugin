@@ -1,10 +1,7 @@
-http://kmgfront.kmgfat.com/
+https://easydoc.net/s/66643688/Gvdnb5ZX/NR6GJHuH
 
-元素隐式具有 "any" 类型，因为类型为 """ | "HomeOrAway" | "Handicap"" 的表达式不能用于索引类型 "Detail"。
-  类型“Detail”上不存在属性“”。ts(7053)
 
-<div className='bet-item'>
-            {data.details[0][getBetPalyName(data.details[0].kindsCode)]} <span className='bet-odd text-primary'>@{data.details[0].oddFinally}</span>
-          </div>
-
-ts报错
+密码:sn8x8BO4
+user: skgkf
+code: 8ffd18c1bb57d79e9d67c054772fb791
+key:  488fa56da73f2a71aa3dc19d9417fc93
