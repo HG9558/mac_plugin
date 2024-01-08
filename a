@@ -5,3 +5,41 @@ https://easydoc.net/s/66643688/Gvdnb5ZX/NR6GJHuH
 user: skgkf
 code: 8ffd18c1bb57d79e9d67c054772fb791
 key:  488fa56da73f2a71aa3dc19d9417fc93
+
+
+[
+    {
+        "id": 998400513,
+        "parentId": 0,
+        "menuName": "结算平台",
+        "children": [
+            {
+                "id": 543154933,
+                "parentId": 998400513,
+                "menuName": "结算管理",
+                "children": [
+                    {
+                        "id": -1235343129,
+                        "parentId": 543154933,
+                        "menuName": "删除事件",
+                        "children": null
+                    },
+                    {
+                        "id": -894127586,
+                        "parentId": 543154933,
+                        "menuName": "编辑事件",
+                        "children": null
+                    },
+                    {
+                        "id": -1101347055,
+                        "parentId": 543154933,
+                        "menuName": "新增事件",
+                        "children": null
+                    }
+                ]
+            }
+        ]
+    }
+]
+
+递归遍历这个数据，扩展两个字段， value = id ; label = menuName
