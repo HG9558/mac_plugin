@@ -1,19 +1,19 @@
-https://easydoc.net/s/66643688/Gvdnb5ZX/NR6GJHuH
-
-
-密码:sn8x8BO4
-user: skgkf
-code: 8ffd18c1bb57d79e9d67c054772fb791
-key:  488fa56da73f2a71aa3dc19d9417fc93
-
-
-if (+(e.target as HTMLInputElement).value == 0) return;
-
-
-"k4e1c5569": "比赛结束",
-  "k7e337a83": "未开始",
-  "k-7e0a1adf": "时间不能小于前一个事件发生时间",
-  "k-483744c4": "确认要开售吗?",
-  "k-1bcf25dd": "确认要下架吗？"
-
-保持格式，翻译成英文
+const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
+  addDialog({
+    title: t('盘口预览'),
+    props: { matchId, matchInfo: row },
+    width: '30%',
+    draggable: true,
+    hideFooter: true,
+    contentRenderer: () =>
+      h(OpeningPreview, {
+        onTest() {
+          console.log('index.vue文件 103==============行打印=', val);
+        }
+      })
+    // contentRenderer: () =>
+    //   h(OpeningPreview, {
+    //     ref: fomrRef
+    //   }),
+  });
+};
