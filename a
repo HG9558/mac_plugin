@@ -7,13 +7,11 @@ const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
     hideFooter: true,
     contentRenderer: () =>
       h(OpeningPreview, {
-        onTest() {
-          console.log('index.vue文件 103==============行打印=', val);
+        onTest: val => {
+          console.log('index.vue文件 102==============行打印=', val);
         }
-      })
-    // contentRenderer: () =>
-    //   h(OpeningPreview, {
-    //     ref: fomrRef
-    //   }),
+      } as any)
   });
 };
+
+如何将any替换为正确的ts类型
