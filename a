@@ -1,32 +1,26 @@
-"k32a3e41": "国家",
-  "k496bd10b": "请选择国家",
-  "k-547e156": "国家地区",
-  "k-3703bae5": "编辑联赛",
-  "kcc472f0": "国家地区不能为空",
-  "k-20b45886": "进球玩法",
-  "k376ba93e": "角球玩法",
-  "k-660a3340": "其他玩法",
-  "k-7ada30e": "暂无数据",
-  "k2105efda": "主",
-  "k583498fa": "客",
-  "k5e204a94": "单",
-  "k87d80d6": "双",
-  "k-2d4e7b01": "大",
-  "k-365504b0": "小",
-  "k-67ca187a": "主胜",
-  "k-6e27b1ec": "客胜",
-  "k37073c9e": "平",
-  "k6e23c48": "其他",
-  "k-70324fe3": "罚牌玩法",
-  "k-3ea3340c": "未开售",
-  "k-54016aee": "保存",
-  "k-61ac399c": "提交",
-  "k-78f4652a": "是否确认修改锁盘状态?",
-  "k27361d84": "盘口状态",
-  "k-1da985cf": "早盘",
-  "k603a992a": "滚球中",
-  "k-4e7a8869": "请先保存事件",
-  "k6c219e41": "结算历史",
-  "k12711277": "确定要锁定当前比赛么?"
+ <el-form-item :label="`${t('联赛等级')}:`" prop="level">
+      <el-input
+        v-model="form.level"
+        :placeholder="t('联赛等级')"
+        clearable
+        v-number="5"
+        v-enter="search"
+        class="!w-[200px]"
+      />
+    </el-form-item>
 
-保持格式，将中文翻译成英文
+
+const MAX_INPUT_NUMBER_LENGTH = 15;
+export const number: Directive = {
+  mounted(el: HTMLInputElement, binding: DirectiveBinding) {
+    const maxLen = binding.value ?? MAX_INPUT_NUMBER_LENGTH;
+    useEventListener(el, 'input', (e) => {
+      if (+(e.target as HTMLInputElement).value == 0) return;
+      (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, maxLen);
+      console.log('index.ts文件 21==============行打印=', e.target.value);
+    });
+  },
+};
+
+
+现在 e.target.value 没有值了，但是form.level 还是有值，比如说，输入了d，e.target.value 值没有，但是form.level 存储了一个d
