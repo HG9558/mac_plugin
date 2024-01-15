@@ -1,26 +1,25 @@
- <el-form-item :label="`${t('联赛等级')}:`" prop="level">
-      <el-input
-        v-model="form.level"
-        :placeholder="t('联赛等级')"
-        clearable
-        v-number="5"
-        v-enter="search"
-        class="!w-[200px]"
-      />
-    </el-form-item>
-
-
-const MAX_INPUT_NUMBER_LENGTH = 15;
 export const number: Directive = {
   mounted(el: HTMLInputElement, binding: DirectiveBinding) {
     const maxLen = binding.value ?? MAX_INPUT_NUMBER_LENGTH;
     useEventListener(el, 'input', (e) => {
-      if (+(e.target as HTMLInputElement).value == 0) return;
-      (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, maxLen);
-      console.log('index.ts文件 21==============行打印=', e.target.value);
+      let inputValue = (e.target as HTMLInputElement).value;
+      if (+inputValue === 0) return;
+
+      inputValue = inputValue.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, maxLen);
+      // 获取组件实例
+      const vm = binding.instance;
+
+      // 更新 modelValue，手动触发 input 事件
+      vm?.$emit('update:modelValue', inputValue);
+      vm?.$emit('input', inputValue);
+      // 使用 v-model 更新 form.level
     });
   },
 };
 
 
-现在 e.target.value 没有值了，但是form.level 还是有值，比如说，输入了d，e.target.value 值没有，但是form.level 存储了一个d
+报错信息
+
+[Vue warn]: Component emitted event "update:modelValue" but it is neither declared in the emits option nor as an "onUpdate:modelValue" prop.
+warn2 @ runtime-core.esm-bundler.js:41
+emit @ runtime-core.esm-bundler.js:621
