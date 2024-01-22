@@ -1,60 +1,32 @@
-import BaseInfo from '../component/BaseInfo.vue';
-import { DefineComponent } from 'vue';
+"k7cf753fd": "主页",
+  "k4de11e23": "首页",
+  "k-2c27fb12": "币种明细",
+  "k48a3efe0": "今日投注信息",
+  "k46fb3a63": "统计的是当前账务日（12点至次日12点）内投注成功（已结算+未结算）的注单数据",
+  "k7b374d4a": "投注额",
+  "k-208b171e": "有效投注金额",
+  "k328d09ee": "盈利额",
+  "k-12d34b9e": "投注笔数",
+  "k-445193a": "今日用户信息",
+  "k-51e7d07e": "统计的是当前账务日（12点至次日12点）内投注成功（已结算+未结算）的用户信息",
+  "k50174c4b": "投注用户数",
+  "k-6eed17dd": "大额投注用户数",
+  "k-69e0aa92": "累计投注额≧￥5000",
+  "k6029840a": "累计用户总数",
+  "k-30f5dd98": "新增用户数",
+  "k-721850f": "账户中心",
+  "k-693a088c": "商户信息管理",
+  "k5cfbaa8f": "币种",
+  "k765fe41e": "有效投注额",
+  "k-383ee6f8": "盈利",
+  "k-41d75bfe": "全场大小",
+  "k4f4396aa": "半场大小",
+  "k-16f35d25": "全场单双",
+  "k-232a28a4": "单双-上半场",
+  "k376f64a9": "全场让球",
+  "k-39fba9ff": "半场让球",
+  "k570001be": "全场独赢",
+  "k-5994ccea": "半场独赢",
 
-// import B from '../component/B.vue';
-// import C from '../component/C.vue';
-// import D from '../component/D.vue';
-// import { BaseInfoListType } from './types';
 
-type BaseInfoListType = {
-  key: string;
-  title: string;
-  component: DefineComponent<any>;
-};
-
-export const useInfo = () => {
-  const list: BaseInfoListType[] = [
-    {
-      key: 'baseInfo',
-      title: t('基本信息'),
-      component: BaseInfo
-      // data:
-    }
-    // {
-    //   key: 'B',
-    //   title: t('商务信息'),
-    //   component: B
-    // },
-    // {
-    //   key: 'C',
-    //   title: t('注单查询条件设置'),
-    //   component: C
-    // },
-    // {
-    //   key: 'D',
-    //   title: t('技术信息'),
-    //   component: D
-    // }
-  ];
-
-  const initList = async () => {
-    const res = await API.getTenantsInfo('cIySafiChqyqfDti');
-    console.log('hook.tsx文件 32==============行打印=', res);
-  };
-
-  onMounted(() => {
-    initList();
-  });
-
-  return { list };
-};
-
-ts报错
-
-不能将类型“DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<{}>>, {}, {}>”分配给类型“DefineComponent<any>”。
-  不能将类型“DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<{}>>, {}, {}>”分配给类型“ComponentPublicInstanceConstructor<CreateComponentPublicInstance<Readonly<any>, {}, {}, ComputedOptions, MethodOptions, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {} | { ...; }>, ... 4 more ..., MethodOptions>”。
-    不能将类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”分配给类型“CreateComponentPublicInstance<Readonly<any>, {}, {}, ComputedOptions, MethodOptions, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {} | { ...; }>”。
-      不能将类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”分配给类型“ExtractComputedReturns<ComputedOptions>”。
-        类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”中缺少类型“string”的索引签名。ts(2322)
-hook.tsx(12, 3): 所需类型来自属性 "component"，在此处的 "BaseInfoListType" 类型上声明该属性
-(property) component: DefineComponent<any>
+保持格式，中文翻译成英文
