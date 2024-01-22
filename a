@@ -1,35 +1,35 @@
-  <template #eventTime="{ row, index }: MatchEventRowType">
-                    <MatchTime :row="row" :index="index" :item="item" />
-                  </template>
-
-//- 组件
-
 <template>
-  <el-time-picker
-    v-model="row.eventTime"
-    :placeholder="t('请选择时间')"
+  <el-select
     :disabled="!row.isEdit"
-    :default-value="new Date(new Date().toLocaleDateString())"
-    value-format="x"
-    @change="changeEventTime(row, index, item.tableList)"
-    format="HH:mm:ss"
-  />
+    v-model="row.matchPeriodId"
+    :placeholder="t('请选择')"
+  >
+    <el-option
+      :label="
+        row.eventCode === MatchEventType.MatchStatus
+          ? t('上半场结束')
+          : t('上半场')
+      "
+      :value="row.eventCode === MatchEventType.MatchStatus ? 31 : 6"
+    />
+    <el-option
+      :label="
+        row.eventCode === MatchEventType.MatchStatus
+          ? t('下半场结束')
+          : t('下半场')
+      "
+      :value="row.eventCode === MatchEventType.MatchStatus ? 100 : 7"
+    />
+  </el-select>
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType } from '../utils/type';
+import { MatchEventRowType, MatchEventType } from '../utils/type';
 
-defineProps<MatchEventRowType>();
-const emits = defineEmits(['changeEventTime']);
-
-const changeEventTime = (...data) => emits('changeEventTime', ...data);
+defineProps<{
+  row: Omit<MatchEventRowType, 'row'>;
+}>();
 </script>
 
 <style scoped></style>
-
-
-export type MatchEventRowType = {
-  row: SattleDataAPI.MatchEventsList;
-  index?: number;
-}
