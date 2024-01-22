@@ -1,6 +1,62 @@
- <el-countdown
-        class="!text-xs mr-3"
-        :value="getTimeValue(row)"
-        format="HH:mm:ss"
-        @finish="countdownFinish(row)"
-      />
+不能将类型“ComputedRef<({ title: any; size: number; question: any; conList: ({ icon: string; middleTxt: any; money: number; } | { icon: string; middleTxt: any; money: string; })[]; } | { title: any; size: number; question: any; conList: ({ ...; } | { ...; })[]; })[]>”分配给类型“ComputedRef<dateMapListType[]>”。
+  不能将类型“({ title: any; size: number; question: any; conList: ({ icon: string; middleTxt: any; money: number; } | { icon: string; middleTxt: any; money: string; })[]; } | { title: any; size: number; question: any; conList: ({ ...; } | { ...; })[]; })[]”分配给类型“dateMapListType[]”。ts(2322)
+const dateMapList: globalThis.ComputedRef<dateMapListType[]>
+
+
+const dateMapList: ComputedRef<dateMapListType[]> = computed(() => {
+  console.log(
+    'index.vue文件 110==============行打印=',
+    renderData.totalValidBetTotalAmount
+  );
+  const _ = [
+    {
+      title: t('今日投注信息'),
+      size: 6,
+      question: t(
+        '统计的是当前账务日（12点至次日12点）内投注成功（已结算+未结算）的注单数据'
+      ),
+      conList: [
+        { icon: 'barChartFill', middleTxt: t('投注额'), money: 0 },
+        {
+          icon: 'redPacketFill',
+          middleTxt: t('有效投注金额'),
+          money: '1'
+        },
+        { icon: 'moneyCnyCircleFill', middleTxt: t('盈利额'), money: 0 },
+        { icon: 'stackFill', middleTxt: t('投注笔数'), money: 0 }
+      ]
+    },
+    {
+      title: t('今日用户信息'),
+      size: 6,
+      question: t(
+        '统计的是当前账务日（12点至次日12点）内投注成功（已结算+未结算）的用户信息'
+      ),
+      conList: [
+        { icon: 'userFill', middleTxt: t('投注用户数'), money: 0 },
+        {
+          icon: 'userFill',
+          middleTxt: t('大额投注用户数'),
+          money: 0,
+          question: t('累计投注额≧￥5000')
+        },
+        { icon: 'userFollowFill', middleTxt: t('累计用户总数'), money: 0 },
+        { icon: 'userFollowFill', middleTxt: t('新增用户数'), money: 0 }
+      ]
+    }
+  ];
+  return _;
+});
+
+
+export type dateMapListType = {
+  title: string;
+  question: string;
+  size: number;
+  conList: {
+    icon: string;
+    middleTxt: string;
+    money: string;
+    question?: string;
+  }[]
+};
