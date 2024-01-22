@@ -1,41 +1,60 @@
-export type MatchEventRowType = {
-  row: SattleDataAPI.MatchEventsList;
-  index?: number;
-}
+import BaseInfo from '../component/BaseInfo.vue';
+import { DefineComponent } from 'vue';
 
+// import B from '../component/B.vue';
+// import C from '../component/C.vue';
+// import D from '../component/D.vue';
+// import { BaseInfoListType } from './types';
 
-<template>
-  <el-select
-    :disabled="!row.isEdit"
-    v-model="row.matchPeriodId"
-    :placeholder="t('请选择')"
-  >
-    <el-option
-      :label="
-        row.eventCode === MatchEventType.MatchStatus
-          ? t('上半场结束')
-          : t('上半场')
-      "
-      :value="row.eventCode === MatchEventType.MatchStatus ? 31 : 6"
-    />
-    <el-option
-      :label="
-        row.eventCode === MatchEventType.MatchStatus
-          ? t('下半场结束')
-          : t('下半场')
-      "
-      :value="row.eventCode === MatchEventType.MatchStatus ? 100 : 7"
-    />
-  </el-select>
-</template>
+type BaseInfoListType = {
+  key: string;
+  title: string;
+  component: DefineComponent<any>;
+};
 
-<script setup lang="ts">
-import { t } from '@/plugins/i18n';
-import { MatchEventRowType, MatchEventType } from '../utils/type';
+export const useInfo = () => {
+  const list: BaseInfoListType[] = [
+    {
+      key: 'baseInfo',
+      title: t('基本信息'),
+      component: BaseInfo
+      // data:
+    }
+    // {
+    //   key: 'B',
+    //   title: t('商务信息'),
+    //   component: B
+    // },
+    // {
+    //   key: 'C',
+    //   title: t('注单查询条件设置'),
+    //   component: C
+    // },
+    // {
+    //   key: 'D',
+    //   title: t('技术信息'),
+    //   component: D
+    // }
+  ];
 
-defineProps<{
-  row: MatchEventRowType;
-}>();
-</script>
+  const initList = async () => {
+    const res = await API.getTenantsInfo('cIySafiChqyqfDti');
+    console.log('hook.tsx文件 32==============行打印=', res);
+  };
 
-<style scoped></style>
+  onMounted(() => {
+    initList();
+  });
+
+  return { list };
+};
+
+ts报错
+
+不能将类型“DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<{}>>, {}, {}>”分配给类型“DefineComponent<any>”。
+  不能将类型“DefineComponent<{}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<{}>>, {}, {}>”分配给类型“ComponentPublicInstanceConstructor<CreateComponentPublicInstance<Readonly<any>, {}, {}, ComputedOptions, MethodOptions, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {} | { ...; }>, ... 4 more ..., MethodOptions>”。
+    不能将类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”分配给类型“CreateComponentPublicInstance<Readonly<any>, {}, {}, ComputedOptions, MethodOptions, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {} | { ...; }>”。
+      不能将类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”分配给类型“ExtractComputedReturns<ComputedOptions>”。
+        类型“CreateComponentPublicInstance<Readonly<ExtractPropTypes<{}>>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 12 more ..., {}>”中缺少类型“string”的索引签名。ts(2322)
+hook.tsx(12, 3): 所需类型来自属性 "component"，在此处的 "BaseInfoListType" 类型上声明该属性
+(property) component: DefineComponent<any>
