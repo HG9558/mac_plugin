@@ -1,14 +1,1 @@
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "rollup",
-        "webpack",
-        "core-js"
-      ]
-    },
-    "allowedDeprecatedVersions": {
-      "sourcemap-codec": "*",
-      "w3c-hr-time": "*",
-      "stable": "*"
-    }
-  },
+vite 打包报错[vite]: Rollup failed to resolve import "defu" from
