@@ -1,31 +1,48 @@
-"k61aff9ea": "电竞结算",
-  "k-58b1c6cd": "赛事列表",
-  "k-659d8fb1": "结算详情",
-  "k-5ece26fe": "全部盘口",
-  "k3ac311bd": "第一局",
-  "k4eb6034b": "一局",
-  "k7ea0ef93": "二局",
-  "k33be4cc1": "三局",
-  "k-5ce730a0": "盘口详情",
-  "k-5563a384": "游戏",
-  "k4c7ba386": "赛事状态",
-  "k-eb1ef61": "队伍",
-  "k46dbe2b2": "结算人员",
-  "k2ef739c7": "盘口ID",
-  "k-12a26b9c": "盘口名称",
-  "kf9101ef": "所属局数",
-  "k58acebe3": "盘口投注项",
-  "k150c25b5": "结算时间",
-  "k1d8e5439": "游戏名称",
-  "k-7ddf02cd": "请输入游戏名称",
-  "k-766076": "请输入赛事ID",
-  "k-7eb21068": "日期选择",
-  "k-f7b1d7d": "游戏ID",
-  "k-3bfc9150": "比赛队伍",
-  "k5e7ca240": "锁盘控制",
-  "k539f27e6": "结算盘口",
-  "k-75ee9311": "赛事盘口未开售!",
-  "k42c36841": "冠军玩法"
+16:06:23  + npm --registry http://npm.bjshxg.com install --legacy-peer-deps
+16:09:15  
+16:09:15  added 941 packages in 3m
+16:09:15  
+16:09:15  185 packages are looking for funding
+16:09:15    run `npm fund` for details
+16:09:15  + npm run build:dpgames-back-stage
+16:09:15  + echo 'Build failed'
+16:09:15  Build failed
+16:09:15  + echo ''
+16:09:15  
+16:09:15  + cat /data/deploy/node/node_build_logs/dpgames-back-stage/fat/20240125160620.log
+16:09:15  
+16:09:15  > pure-admin-thin@4.5.0 build:dpgames-back-stage
+16:09:15  > rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build
+16:09:15  
+16:09:15  vite v4.5.2 building for production...
+16:09:15  transforming...
+16:09:15  ✓ 8 modules transformed.
+16:09:15  ✓ built in 4.17s
+16:09:15  [vite]: Rollup failed to resolve import "defu" from "/data/deploy/node/node_src/dpgames-back-stage/node_modules/@vueuse/motion/dist/index.mjs".
+16:09:15  This is most likely unintended because it can break your application at runtime.
+16:09:15  If you do want to externalize this module explicitly add it to
+16:09:15  `build.rollupOptions.external`
+16:09:15  error during build:
+16:09:15  Error: [vite]: Rollup failed to resolve import "defu" from "/data/deploy/node/node_src/dpgames-back-stage/node_modules/@vueuse/motion/dist/index.mjs".
+16:09:15  This is most likely unintended because it can break your application at runtime.
+16:09:15  If you do want to externalize this module explicitly add it to
+16:09:15  `build.rollupOptions.external`
+16:09:15      at viteWarn (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:48216:27)
+16:09:15      at onRollupWarning (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:48248:9)
+16:09:15      at onwarn (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:47976:13)
+16:09:15      at file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24276:13
+16:09:15      at Object.logger [as onLog] (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:25950:9)
+16:09:15      at ModuleLoader.handleInvalidResolvedId (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24862:26)
+16:09:15      at file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24822:26
+16:09:15  + exit 1
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+16:09:15  Failed in branch dpgames-back-stage
 
 
-保持格式，中文翻译成英文
+jenkins打包报错
