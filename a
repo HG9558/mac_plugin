@@ -1,48 +1,14 @@
-16:06:23  + npm --registry http://npm.bjshxg.com install --legacy-peer-deps
-16:09:15  
-16:09:15  added 941 packages in 3m
-16:09:15  
-16:09:15  185 packages are looking for funding
-16:09:15    run `npm fund` for details
-16:09:15  + npm run build:dpgames-back-stage
-16:09:15  + echo 'Build failed'
-16:09:15  Build failed
-16:09:15  + echo ''
-16:09:15  
-16:09:15  + cat /data/deploy/node/node_build_logs/dpgames-back-stage/fat/20240125160620.log
-16:09:15  
-16:09:15  > pure-admin-thin@4.5.0 build:dpgames-back-stage
-16:09:15  > rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build
-16:09:15  
-16:09:15  vite v4.5.2 building for production...
-16:09:15  transforming...
-16:09:15  ✓ 8 modules transformed.
-16:09:15  ✓ built in 4.17s
-16:09:15  [vite]: Rollup failed to resolve import "defu" from "/data/deploy/node/node_src/dpgames-back-stage/node_modules/@vueuse/motion/dist/index.mjs".
-16:09:15  This is most likely unintended because it can break your application at runtime.
-16:09:15  If you do want to externalize this module explicitly add it to
-16:09:15  `build.rollupOptions.external`
-16:09:15  error during build:
-16:09:15  Error: [vite]: Rollup failed to resolve import "defu" from "/data/deploy/node/node_src/dpgames-back-stage/node_modules/@vueuse/motion/dist/index.mjs".
-16:09:15  This is most likely unintended because it can break your application at runtime.
-16:09:15  If you do want to externalize this module explicitly add it to
-16:09:15  `build.rollupOptions.external`
-16:09:15      at viteWarn (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:48216:27)
-16:09:15      at onRollupWarning (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:48248:9)
-16:09:15      at onwarn (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/vite/dist/node/chunks/dep-52909643.js:47976:13)
-16:09:15      at file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24276:13
-16:09:15      at Object.logger [as onLog] (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:25950:9)
-16:09:15      at ModuleLoader.handleInvalidResolvedId (file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24862:26)
-16:09:15      at file:///data/deploy/node/node_src/dpgames-back-stage/node_modules/rollup/dist/es/shared/node-entry.js:24822:26
-16:09:15  + exit 1
-[Pipeline] }
-[Pipeline] // dir
-[Pipeline] }
-[Pipeline] // script
-[Pipeline] }
-[Pipeline] // stage
-[Pipeline] }
-16:09:15  Failed in branch dpgames-back-stage
-
-
-jenkins打包报错
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "rollup",
+        "webpack",
+        "core-js"
+      ]
+    },
+    "allowedDeprecatedVersions": {
+      "sourcemap-codec": "*",
+      "w3c-hr-time": "*",
+      "stable": "*"
+    }
+  },
