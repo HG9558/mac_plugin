@@ -1,17 +1,111 @@
-  "k9cbe1e0": "修改",
-  "k4ea93630": "请输入内容",
-  "k19b8b33": "菜单名称",
-  "k-61caddc7": "请输入菜单名称",
-  "k15a381d5": "新增节点",
-  "k4bb5ae38": "请先选择节点的编辑类型",
-  "k1c41862": "请选择操作类型",
-  "k4d1b7e6e": "修改节点",
-  "kd14ff96": "是否显示",
-  "k35ca29d1": "插入位置",
-  "k-486be640": "第一列",
-  "k1c5e419a": "最后一列",
-  "k-1d026fb0": "新增根节点",
-  "k-2b4d316b": "新增子菜单"
+const o1 = [
+    {
+        "path": "/esports",
+        "meta": {
+            "title": "电子竞技",
+            "icon": "esports",
+            "rank": 5
+        },
+        "children": [
+            {
+                "path": "/esports/match",
+                "name": "eMatch",
+                "meta": {
+                    "title": "联赛库",
+                    "showParent": true
+                }
+            },
+            {
+                "path": "/esports/team",
+                "name": "eTeam",
+                "meta": {
+                    "title": "球队库",
+                    "showParent": true
+                }
+            }
+        ]
+    },
+    {
+        "path": "/esportsSettlement",
+        "meta": {
+            "title": "电竞结算",
+            "icon": "esportsSettlement",
+            "rank": 4
+        },
+        "children": [
+            {
+                "path": "/esportsSettlement/match",
+                "name": "ESPORTSSETTLEMENT_MATCH",
+                "meta": {
+                    "title": "赛事列表",
+                    "showParent": true
+                }
+            },
+            {
+                "path": "/esportsSettlement/esportsSettlementDetail/:matchId",
+                "name": "ESPORTSSETTLEMENT_ESPORTSSETTLEMENTDETAIL",
+                "meta": {
+                    "showLink": false,
+                    "title": "结算详情"
+                }
+            }
+        ]
+    },
+    {
+        "path": "/history",
+        "name": "history",
+        "meta": {
+            "title": "赛程历史",
+            "icon": "history",
+            "rank": 7
+        }
+    }
+]
 
+const o2 = [
+  {
+    "path": "/esportsSettlement",
+    rank: 3,
+    "title": "电竞结算",
+    "children": [
+      {
+        "path": "/esportsSettlement/match",
+        "title": "赛事列表",
+        "showParent": true,
+        rank: '3-0',
+      },
+      {
+        "path": "/esportsSettlement/esportsSettlementDetail/:matchId",
+        "showLink": false,
+        "title": "结算详情",
+        rank: '3-1',
+      }
+    ]
+  },
+  {
+    "path": "/esports",
+    rank: 4,
+    "title": "电子竞技",
+    "children": [
+      {
+        "path": "/esports/match",
+        "title": "联赛库",
+        "showParent": true,
+        rank: '4-1',
+      },
+      {
+        "path": "/esports/team",
+        "title": "球队库",
+        "showParent": true,
+        rank: '4-2',
+      }
+    ]
+  },
+  {
+    "path": "/history",
+    rank: 6,
+    "title": "赛程历史",
+  },
+]
 
-保持格式，中文翻译成英文
+需求：如果o1 的path与o2的path相同，将o1的值重新覆盖o2的值，如果没有，保留o1的值，如果里面有children，执行同样的操作
