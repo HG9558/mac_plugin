@@ -1,37 +1,48 @@
-.bet_item {
-  &.el-radio-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
+  addDialog({
+    title: t('请求参数'),
+    props: {
+      requestLog: JSON.parse(row.requestLog) ?? {}
+    },
+    width: '40%',
+    draggable: true,
+    hideFooter: true,
+    fullscreenIcon: true,
+    closeOnClickModal: false,
+    contentRenderer: () => h(RequestDialog)
+  });
+};
 
-    label {
-      :deep() {
-        .el-radio__label {
-          display: flex !important;
-          span:first-child {
-            max-width: 130px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            display: inline-block;
-          }
-        }
-      }
-    }
-  }
-}
+//- 组件RequestDialog
 
- <template #betOptions="{ row }">
-              <el-radio-group class="bet_item" v-model="row.betOptions">
-                <el-radio
-                  :disabled="row.win != null"
-                  :label="index"
-                  border
-                  :class="[row.arr.length > 2 && 'mb-1']"
-                  v-for="(item, index) in row.arr"
-                  :key="index"
-                >
-                  <span>{{ item.handicap }}</span>
-                  <span class="ml-3">{{ item.odds }}</span>
-                </el-radio>
-              </el-radio-group>
-            </template>
+<template>
+  <vue-json-pretty
+    v-model:data="renderData"
+    :deep="3"
+    :show-double-quotes="true"
+    :show-line="true"
+    :show-length="true"
+    :show-line-number="true"
+    :editable="false"
+  />
+</template>
+
+<script setup lang="ts">
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
+import { JSONDataType } from 'vue-json-pretty/types/utils';
+const props = defineProps<{
+  requestLog: JSONDataType;
+}>();
+
+const renderData = reactive<JSONDataType>(props.requestLog);
+</script>
+
+<style scoped></style>
+
+ts报错 
+
+类型“JSONDataType”不满足约束“object”。
+  不能将类型“string”分配给类型“object”。ts(2344)
+(alias) type JSONDataType = string | number | boolean | unknown[] | Record<string, unknown>
+import JSONDataType
