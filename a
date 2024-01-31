@@ -1,48 +1,21 @@
-const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
-  addDialog({
-    title: t('请求参数'),
-    props: {
-      requestLog: JSON.parse(row.requestLog) ?? {}
-    },
-    width: '40%',
-    draggable: true,
-    hideFooter: true,
-    fullscreenIcon: true,
-    closeOnClickModal: false,
-    contentRenderer: () => h(RequestDialog)
-  });
-};
-
-//- 组件RequestDialog
-
-<template>
-  <vue-json-pretty
-    v-model:data="renderData"
-    :deep="3"
-    :show-double-quotes="true"
-    :show-line="true"
-    :show-length="true"
-    :show-line-number="true"
-    :editable="false"
-  />
-</template>
-
-<script setup lang="ts">
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
-import { JSONDataType } from 'vue-json-pretty/types/utils';
-const props = defineProps<{
-  requestLog: JSONDataType;
-}>();
-
-const renderData = reactive<JSONDataType>(props.requestLog);
-</script>
-
-<style scoped></style>
-
-ts报错 
-
-类型“JSONDataType”不满足约束“object”。
-  不能将类型“string”分配给类型“object”。ts(2344)
-(alias) type JSONDataType = string | number | boolean | unknown[] | Record<string, unknown>
-import JSONDataType
+  "k67d68dd1": "类型",
+  "k4617920b": "请输入菜单类型",
+  "k372d49ce": "url地址",
+  "k4a985544": "请输入英文大小写url链接，禁止包含空格，同级地址禁止重复",
+  "k-12eedfe5": "确定要调整菜单显示顺序么",
+  "k-4c18820": "菜单链接",
+  "k-5c5e5698": "按钮链接",
+  "k1e4ca2ab": "结算状态",
+  "k402018ce": "类别",
+  "k2e94d295": "菜单",
+  "k-4d9d2f87": "参数key",
+  "k6bb88e41": "输入按钮链接跳转时的参数key",
+  "k-721850f": "账户中心",
+  "k-693a088c": "商户信息管理",
+  "k4d422173": "注单管理",
+  "kef7179": "未结算注单",
+  "k7dca2d82": "已结算注单",
+  "k-391420d2": "数据中心",
+  "k-465882c5": "商户注单统计",
+  "k-5dc36adc": "用户投注统计",
+  "k-ca95496": "点击查看"
